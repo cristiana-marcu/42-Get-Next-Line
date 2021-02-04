@@ -6,7 +6,7 @@
 /*   By: cmarcu <cmarcu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/02 13:19:09 by cmarcu            #+#    #+#             */
-/*   Updated: 2021/02/04 16:01:27 by cmarcu           ###   ########.fr       */
+/*   Updated: 2021/02/04 16:08:16 by cmarcu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,35 +38,35 @@ int		get_next_line(int fd, char **line)
 	size_t		re;
 	char		buf[BUFFER_SIZE + 1];
 	char		*temp;
-	static char	*current_line;
+	static char	*read_acu;
 
 	if (fd < 0 || fd > 123 || !line || BUFFER_SIZE <= 0)
 		return (-1);
-	if (!current_line)
-		current_line = (char *)malloc(1);
-	while (!ft_strchr(current_line, '\n') && (re = read(fd, buf, BUFFER_SIZE)) > 0)
+	if (!read_acu)
+		read_acu = (char *)malloc(1);
+	while (!ft_strchr(read_acu, '\n') && (re = read(fd, buf, BUFFER_SIZE)) > 0)
 	{
 		buf[re] = '\0';
-		temp = ft_strjoin(current_line, buf);
+		temp = ft_strjoin(read_acu, buf);
 		//printf("Temp is: %s\n", temp);
-		free(current_line);
-		current_line = temp;
+		free(read_acu);
+		read_acu = temp;
 	}
-	//printf("Current line is: %s\n", current_line);
+	//printf("Current line is: %s\n", read_acu);
 	//printf("Re is: %zu\n", re);
 	if (re == 0)
-		*line = ft_strdup(current_line);
+		*line = ft_strdup(read_acu);
 	else if (re > 0)
 	{
-		size_t length = ft_strchr(current_line, '\n') - current_line;
-		*line = ft_substr(current_line, 0, length);
+		size_t length = ft_strchr(read_acu, '\n') - read_acu;
+		*line = ft_substr(read_acu, 0, length);
 		//printf("Line is: %s\n", *line);
 	}
 	else
 		return (-1);
-	temp = ft_substr(current_line, ft_strlen(*line) + 1, ft_strlen(current_line));
-	free(current_line);
-	current_line = temp;
+	temp = ft_substr(read_acu, ft_strlen(*line) + 1, ft_strlen(read_acu));
+	free(read_acu);
+	read_acu = temp;
 	return (re == 0 ? 0 : 1);
 }
 
