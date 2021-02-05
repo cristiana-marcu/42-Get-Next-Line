@@ -6,7 +6,7 @@
 /*   By: cmarcu <cmarcu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/02 13:19:09 by cmarcu            #+#    #+#             */
-/*   Updated: 2021/02/04 16:08:16 by cmarcu           ###   ########.fr       */
+/*   Updated: 2021/02/05 16:07:39 by cmarcu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,35 @@ char	*ft_strdup(const char *s1)
 	}
 	copy[a] = '\0';
 	return (copy);
+}
+
+void	ft_bzero(void *s, size_t n)
+{
+	unsigned char	*p;
+	size_t			a;
+
+	p = (unsigned char *)s;
+	a = 0;
+	while (a < n)
+	{
+		p[a] = '\0';
+		a++;
+	}
+}
+
+int		delmem(char **p)
+{
+	if (p)
+	{
+		if (*p)
+		{
+			ft_bzero(*p, ft_strlen(*p));
+			free(*p);
+			*p = NULL;
+			return (1);
+		}
+	}
+	return (0);
 }
 
 int		get_next_line(int fd, char **line)
@@ -67,7 +96,7 @@ int		get_next_line(int fd, char **line)
 	temp = ft_substr(read_acu, ft_strlen(*line) + 1, ft_strlen(read_acu));
 	free(read_acu);
 	read_acu = temp;
-	return (re == 0 ? 0 : 1);
+	return (re == 0 ? 0 * delmem(&read_acu): 1);
 }
 
 /*int main(void)
