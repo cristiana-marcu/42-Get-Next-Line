@@ -6,7 +6,7 @@
 /*   By: cmarcu <cmarcu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/02 13:19:09 by cmarcu            #+#    #+#             */
-/*   Updated: 2021/02/10 11:34:03 by cmarcu           ###   ########.fr       */
+/*   Updated: 2021/02/10 11:56:12 by cmarcu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
-void	ft_bzero(void *s, size_t n)
+void	ft_bzero(char *s, size_t n)
 {
 	unsigned char	*p;
 	size_t			a;
@@ -44,7 +44,7 @@ int		delmem(char **p)
 	return (0);
 }
 
-char		*ft_strnew(size_t size)
+char	*ft_strnew(size_t size)
 {
 	char	*ptr;
 

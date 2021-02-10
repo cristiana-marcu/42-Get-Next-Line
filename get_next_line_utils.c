@@ -6,7 +6,7 @@
 /*   By: cmarcu <cmarcu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 09:39:28 by cmarcu            #+#    #+#             */
-/*   Updated: 2021/02/10 11:10:15 by cmarcu           ###   ########.fr       */
+/*   Updated: 2021/02/10 12:16:28 by cmarcu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,15 +58,14 @@ char	*ft_strjoin(char const *s1, char const *s2)
 		p[a] = s1[a];
 		a++;
 	}
-	b = a;
-	a = 0;
-	while (s2[a] != '\0')
+	b = 0;
+	while (s2[b] != '\0')
 	{
-		p[b] = s2[a];
+		p[a] = s2[b];
 		a++;
 		b++;
 	}
-	p[b] = '\0';
+	p[a] = '\0';
 	return (p);
 }
 
@@ -77,13 +76,12 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 
 	if (!s)
 		return (NULL);
-	a = 0;
+	if (!(p = (char*)malloc(sizeof(*s) * (len + 1))))
+		return (NULL);
 	if ((size_t)start >= ft_strlen(s))
 		start = ft_strlen(s);
-	p = (char*)malloc(sizeof(*s) * (len + 1));
-	if (!p)
-		return (NULL);
-	while (a < len)
+	a = 0;
+	while (a < len && s[start])
 	{
 		p[a] = s[start + a];
 		a++;
