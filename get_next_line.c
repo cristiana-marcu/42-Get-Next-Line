@@ -6,7 +6,7 @@
 /*   By: cmarcu <cmarcu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/02 13:19:09 by cmarcu            #+#    #+#             */
-/*   Updated: 2021/02/10 11:56:12 by cmarcu           ###   ########.fr       */
+/*   Updated: 2021/02/10 16:23:39 by cmarcu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,28 +44,17 @@ int		delmem(char **p)
 	return (0);
 }
 
-char	*ft_strnew(size_t size)
-{
-	char	*ptr;
-
-	ptr = (char *)malloc((size + 1) * sizeof(char));
-	if (ptr == NULL)
-		return (NULL);
-	ft_bzero(ptr, size);
-	return (ptr);
-}
-
 int		get_next_line(int fd, char **line)
 {
 	size_t		re;
-	char		buf[BUFFER_SIZE + (re = 1)];
+	char		buf[BUFFER_SIZE + 1];
 	char		*temp;
 	static char	*read_acu;
 
 	if (fd < 0 || fd > 123 || !line || BUFFER_SIZE <= 0)
 		return (-1);
 	if (!read_acu)
-		read_acu = ft_strnew(0);
+		read_acu = ft_strdup("");
 	while (!ft_strchr(read_acu, '\n') && (re = read(fd, buf, BUFFER_SIZE)) > 0)
 	{
 		buf[re] = '\0';
