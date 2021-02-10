@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get-next-lline-utils.c                             :+:      :+:    :+:   */
+/*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cmarcu <cmarcu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 09:39:28 by cmarcu            #+#    #+#             */
-/*   Updated: 2021/02/04 09:39:43 by cmarcu           ###   ########.fr       */
+/*   Updated: 2021/02/10 11:10:15 by cmarcu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,4 +90,22 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	}
 	p[a] = '\0';
 	return (p);
+}
+
+char	*ft_strdup(const char *s1)
+{
+	char			*copy;
+	unsigned int	a;
+
+	copy = (char*)malloc(sizeof(*s1) * (ft_strlen(s1) + 1));
+	if (!copy)
+		return (NULL);
+	a = 0;
+	while (s1[a] != '\0')
+	{
+		copy[a] = s1[a];
+		a++;
+	}
+	copy[a] = '\0';
+	return (copy);
 }

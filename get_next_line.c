@@ -6,7 +6,7 @@
 /*   By: cmarcu <cmarcu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/02 13:19:09 by cmarcu            #+#    #+#             */
-/*   Updated: 2021/02/05 16:07:39 by cmarcu           ###   ########.fr       */
+/*   Updated: 2021/02/10 11:34:03 by cmarcu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,24 +14,6 @@
 
 #include <sys/stat.h>
 #include <fcntl.h>
-
-char	*ft_strdup(const char *s1)
-{
-	char			*copy;
-	unsigned int	a;
-
-	copy = (char*)malloc(sizeof(*s1) * (ft_strlen(s1) + 1));
-	if (!copy)
-		return (NULL);
-	a = 0;
-	while (s1[a] != '\0')
-	{
-		copy[a] = s1[a];
-		a++;
-	}
-	copy[a] = '\0';
-	return (copy);
-}
 
 void	ft_bzero(void *s, size_t n)
 {
@@ -62,39 +44,48 @@ int		delmem(char **p)
 	return (0);
 }
 
+char		*ft_strnew(size_t size)
+{
+	char	*ptr;
+
+	ptr = (char *)malloc((size + 1) * sizeof(char));
+	if (ptr == NULL)
+		return (NULL);
+	ft_bzero(ptr, size);
+	return (ptr);
+}
+
 int		get_next_line(int fd, char **line)
 {
 	size_t		re;
-	char		buf[BUFFER_SIZE + 1];
+	char		buf[BUFFER_SIZE + (re = 1)];
 	char		*temp;
 	static char	*read_acu;
 
 	if (fd < 0 || fd > 123 || !line || BUFFER_SIZE <= 0)
 		return (-1);
 	if (!read_acu)
-		read_acu = (char *)malloc(1);
+		read_acu = ft_strnew(0);
 	while (!ft_strchr(read_acu, '\n') && (re = read(fd, buf, BUFFER_SIZE)) > 0)
 	{
 		buf[re] = '\0';
 		temp = ft_strjoin(read_acu, buf);
 		//printf("Temp is: %s\n", temp);
-		free(read_acu);
+		delmem(&read_acu);
 		read_acu = temp;
 	}
-	//printf("Current line is: %s\n", read_acu);
+	//printf("Accumulated reading is: %s\n", read_acu);
 	//printf("Re is: %zu\n", re);
 	if (re == 0)
 		*line = ft_strdup(read_acu);
 	else if (re > 0)
-	{
-		size_t length = ft_strchr(read_acu, '\n') - read_acu;
-		*line = ft_substr(read_acu, 0, length);
-		//printf("Line is: %s\n", *line);
-	}
+		*line = ft_substr(read_acu, 0, (ft_strchr(read_acu, '\n') - read_acu));
+	//printf("Line is: %s\n", *line);
 	else
 		return (-1);
-	temp = ft_substr(read_acu, ft_strlen(*line) + 1, ft_strlen(read_acu));
-	free(read_acu);
+	//temp = ft_substr(read_acu, ft_strlen(*line) + ((re > 0) ? +1 : +0), ft_strlen(read_acu));
+	temp = ft_strdup(read_acu + (ft_strlen(*line) + ((re > 0) ? +1 : +0)));
+	delmem(&read_acu);
 	read_acu = temp;
 	return (re == 0 ? 0 * delmem(&read_acu): 1);
 }
