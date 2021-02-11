@@ -6,14 +6,11 @@
 /*   By: cmarcu <cmarcu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/02 13:19:09 by cmarcu            #+#    #+#             */
-/*   Updated: 2021/02/10 16:23:39 by cmarcu           ###   ########.fr       */
+/*   Updated: 2021/02/11 16:30:52 by cmarcu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-
-#include <sys/stat.h>
-#include <fcntl.h>
 
 void	ft_bzero(char *s, size_t n)
 {
@@ -44,55 +41,49 @@ int		delmem(char **p)
 	return (0);
 }
 
+int		mount_next_line(int re, char *temp, char **re_acu, char **line)
+{
+	int aux;
+
+	if (re > 0)
+		aux = 1;
+	else
+		aux = 0;
+	temp = ft_substr(*re_acu, ft_strlen(*line) + aux, ft_strlen(*re_acu));
+	delmem(re_acu);
+	*re_acu = temp;
+	if (re == 0)
+	{
+		delmem(re_acu);
+		return (0);
+	}
+	return (1);
+}
+
 int		get_next_line(int fd, char **line)
 {
 	size_t		re;
 	char		buf[BUFFER_SIZE + 1];
 	char		*temp;
-	static char	*read_acu;
+	static char	*re_acu;
 
+	re = 1;
 	if (fd < 0 || fd > 123 || !line || BUFFER_SIZE <= 0)
 		return (-1);
-	if (!read_acu)
-		read_acu = ft_strdup("");
-	while (!ft_strchr(read_acu, '\n') && (re = read(fd, buf, BUFFER_SIZE)) > 0)
+	if (!re_acu)
+		re_acu = ft_strdup("");
+	while (!ft_strchr(re_acu, '\n') && (re = read(fd, buf, BUFFER_SIZE)) > 0)
 	{
 		buf[re] = '\0';
-		temp = ft_strjoin(read_acu, buf);
-		//printf("Temp is: %s\n", temp);
-		delmem(&read_acu);
-		read_acu = temp;
+		temp = ft_strjoin(re_acu, buf);
+		delmem(&re_acu);
+		re_acu = temp;
 	}
-	//printf("Accumulated reading is: %s\n", read_acu);
-	//printf("Re is: %zu\n", re);
 	if (re == 0)
-		*line = ft_strdup(read_acu);
+		*line = ft_strdup(re_acu);
 	else if (re > 0)
-		*line = ft_substr(read_acu, 0, (ft_strchr(read_acu, '\n') - read_acu));
-	//printf("Line is: %s\n", *line);
+		*line = ft_substr(re_acu, 0, (ft_strchr(re_acu, '\n') - re_acu));
 	else
 		return (-1);
-	//temp = ft_substr(read_acu, ft_strlen(*line) + ((re > 0) ? +1 : +0), ft_strlen(read_acu));
-	temp = ft_strdup(read_acu + (ft_strlen(*line) + ((re > 0) ? +1 : +0)));
-	delmem(&read_acu);
-	read_acu = temp;
-	return (re == 0 ? 0 * delmem(&read_acu): 1);
+	return (mount_next_line(re, temp, &re_acu, line));
 }
-
-/*int main(void)
-{
-	int fd = open("test.txt", 0);
-	printf("File descriptor is: %d\n", fd);
-	char *str = "Primera linea";
-	char **line = &str;
-	int i = 1;
-	while (i > 0)
-	{
-		i = get_next_line(fd, line);
-		printf("Ended operation with exit code: %d\n", i);
-		free(*line);
-	}
-	system("leaks a.out");
-	return (0);
-}
-*/
