@@ -6,11 +6,12 @@
 /*   By: cmarcu <cmarcu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/02 13:19:09 by cmarcu            #+#    #+#             */
-/*   Updated: 2021/02/11 16:30:52 by cmarcu           ###   ########.fr       */
+/*   Updated: 2021/02/12 09:32:55 by cmarcu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+#include <stdlib.h>
 
 void	ft_bzero(char *s, size_t n)
 {
@@ -41,9 +42,10 @@ int		delmem(char **p)
 	return (0);
 }
 
-int		mount_next_line(int re, char *temp, char **re_acu, char **line)
+int		mount_next_line(int re, char **re_acu, char **line)
 {
-	int aux;
+	int		aux;
+	char	*temp;
 
 	if (re > 0)
 		aux = 1;
@@ -62,13 +64,13 @@ int		mount_next_line(int re, char *temp, char **re_acu, char **line)
 
 int		get_next_line(int fd, char **line)
 {
-	size_t		re;
+	int			re;
 	char		buf[BUFFER_SIZE + 1];
 	char		*temp;
 	static char	*re_acu;
 
 	re = 1;
-	if (fd < 0 || fd > 123 || !line || BUFFER_SIZE <= 0)
+	if (fd < 0 || !line || BUFFER_SIZE <= 0)
 		return (-1);
 	if (!re_acu)
 		re_acu = ft_strdup("");
@@ -84,6 +86,6 @@ int		get_next_line(int fd, char **line)
 	else if (re > 0)
 		*line = ft_substr(re_acu, 0, (ft_strchr(re_acu, '\n') - re_acu));
 	else
-		return (-1);
-	return (mount_next_line(re, temp, &re_acu, line));
+		return (-1 * delmem(&re_acu));
+	return (mount_next_line(re, &re_acu, line));
 }

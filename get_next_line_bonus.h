@@ -6,7 +6,7 @@
 /*   By: cmarcu <cmarcu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/11 10:15:54 by cmarcu            #+#    #+#             */
-/*   Updated: 2021/02/11 16:06:58 by cmarcu           ###   ########.fr       */
+/*   Updated: 2021/02/12 09:30:36 by cmarcu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ char	*ft_substr(char const *s, unsigned int start, size_t len);
 char	*ft_strdup(const char *s1);
 void	ft_bzero(char *s, size_t n);
 int		delmem(char **p);
-int		mount_next_line(int re, int fd, char *temp, char **re_acu, char **line);
+int		mount_next_line(int re, int fd, char **re_acu, char **line);
 int		get_next_line(int fd, char **line);
 
 #endif
